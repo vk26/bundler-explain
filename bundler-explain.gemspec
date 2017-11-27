@@ -7,16 +7,17 @@ require "bundler/explain/version"
 Gem::Specification.new do |s|
   s.name        = "bundler-explain"
   s.version     = Bundler::Explain::VERSION
-  s.authors     = ["Dmitriy"]
+  s.authors     = ["Dmitriy Belyavtsev"]
   s.email       = ["vkosmos26@yandex.ru"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of Bundler::Explain."
-  s.description = "TODO: Description of Bundler::Explain."
+  s.homepage    = ""
+  s.summary     = "Summary of Bundler::Explain."
+  s.description = "Description of Bundler::Explain."
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
-  s.add_dependency "rails", "~> 5.1.4"
+  # s.add_dependency "rails"
 
-  s.add_development_dependency "sqlite3"
+  # s.add_development_dependency 'bundler'
+  s.add_development_dependency 'rspec'
 end
