@@ -1,5 +1,5 @@
-module Bundler
-  module Explain
-    # Your code goes here...
-  end
-end
+require 'bundler/explain/parser'
+require 'bundler/explain/dependency_analyzer'
+require 'bundler/explain/renderer'
+require 'bundler/explain/explain'
+require 'bundler/explain/version'
