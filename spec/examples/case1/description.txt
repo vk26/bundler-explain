@@ -1,0 +1,1 @@
+Example Gemfile.lock is generated when create new rails app
