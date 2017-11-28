@@ -6,7 +6,7 @@ module Bundler
       end
 
       def call
-        # TODO:
+        # TODO: format dependency_tree and output
       end
     end
   end

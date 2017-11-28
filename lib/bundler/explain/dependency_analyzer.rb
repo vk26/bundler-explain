@@ -7,7 +7,7 @@ module Bundler
       end
 
       def call
-        # TODO:
+        # TODO: find dependencies for gem and return hash of dependencies tree
       end
     end
   end
