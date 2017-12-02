@@ -1,26 +1,34 @@
 module Bundler
   module Explain
     class Parser
-      def initialize(file)
-        @file = file
-        @tree = {}
+      attr_reader :dependencies, :from_gemfile, :errors
+
+      def initialize(params = {})
+        @gemfile = params[:gemfile]
+        @gemfile_lock = params[:gemfile_lock]
+        @dependencies = {}
+        @from_gemfile = []
+        @errors = []
       end
 
       def call
-        File.open(@file).each do |line|
-          prefix_whitespaces = line[/^\s{1,}/]
-          nested_level = prefix_whitespaces.nil? ? 0 : prefix_whitespaces.length / 2
-          node_key = line.strip
-          if nested_level = 0
-            @tree.merge!(node_key: nil)
-          else
-            last_node_path = []
-            nested_level.times do
-              last_node_path.push @tree.keys.last
-            end
-            last_node_path
+        begin
+          definition = if @gemfile && @gemfile_lock
+                          Bundler::Definition.build(@gemfile, @gemfile_lock, nil)
+                       else
+                          Bundler.definition
+                       end
+          @dependencies = definition.gem_version_promoter.locked_specs.inject(Hash.new([])) do |h, dep|
+            h[dep.name] = dep.dependencies.map(&:name); h
           end
-        end && @tree
+          @from_gemfile = definition.dependencies.map(&:name)
+        rescue => e
+          errors.push e
+        end && self
+      end
+
+      def success?
+        errors.empty?
       end
     end
   end

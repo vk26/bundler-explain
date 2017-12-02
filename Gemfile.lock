@@ -30,6 +30,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bundler
   bundler-explain!
   pry
   rspec

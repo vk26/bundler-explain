@@ -2,10 +2,16 @@ require 'spec_helper'
 
 describe Bundler::Explain::Parser do
   describe '#call' do
+    let(:gemfile) { File.expand_path("#{File.dirname(__FILE__)}/../../../examples/case1/Gemfile") }
+    let(:gemfile_lock) { File.expand_path("#{File.dirname(__FILE__)}/../../../examples/case1/Gemfile.lock") }
+    subject { Bundler::Explain::Parser.new(gemfile: gemfile, gemfile_lock: gemfile_lock).call }
     it 'process file to hash' do
-      file_path = "#{File.dirname(__FILE__)}/../../../examples/case1/Gemfile.lock"
-      result = Bundler::Explain::Parser.new(file_path).call
-      expect(result.dig('GEM', 'specs', 'actioncable (5.1.4)').keys).to match_array ['actionpack (= 5.1.4)', 'nio4r (~> 2.0)', 'websocket-driver (~> 0.6.1)']
+      expect(subject.dependencies["activesupport"]).to match_array ["concurrent-ruby", "i18n", "minitest", "tzinfo"]
+      expect(subject.dependencies["actioncable"]).to match_array ["actionpack", "nio4r", "websocket-driver"]
+      expect(subject.from_gemfile).to match_array %w(
+        rails sqlite3 puma sass-rails uglifier coffee-rails turbolinks jbuilder byebug
+        capybara selenium-webdriver web-console listen spring spring-watcher-listen tzinfo-data
+      )
     end
   end
 end
