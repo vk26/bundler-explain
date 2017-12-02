@@ -11,7 +11,16 @@ describe Bundler::Explain::DependencyAnalyzer do
     subject { Bundler::Explain::DependencyAnalyzer.new(from_gemfile, dependencies, gem).call }
 
     it 'find dependencies for gem' do
-      expect(subject).to eq ['nio4r', 'actioncable', 'rails']
+      expect(subject).to include ( { "nio4r" =>[{ "actioncable"=> [{"rails" => nil }] }] } )
+    end
+  end
+
+  context 'more complex dependencies' do
+    let(:gem) { 'globalid' }
+    subject { Bundler::Explain::DependencyAnalyzer.new(from_gemfile, dependencies, gem).call }
+
+    it 'find dependencies for gem' do
+      expect(subject).to include ( {"globalid" => [{"activejob" => [{"actionmailer" => [{"rails" => nil}]}, {"rails" => nil}]}]} )
     end
   end
 end
