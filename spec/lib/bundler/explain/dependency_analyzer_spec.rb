@@ -3,24 +3,24 @@ require 'spec_helper'
 describe Bundler::Explain::DependencyAnalyzer do
   let(:gemfile) { "#{base_examples_folder}/case1/Gemfile" }
   let(:gemfile_lock) { "#{base_examples_folder}/case1/Gemfile.lock" }
-  let(:from_gemfile) { Bundler::Explain::Parser.new(gemfile: gemfile, gemfile_lock: gemfile_lock).call.from_gemfile }
-  let(:dependencies) { Bundler::Explain::Parser.new(gemfile: gemfile, gemfile_lock: gemfile_lock).call.dependencies }
+  let(:direct_dependencies) { Bundler::Explain::Parser.new(gemfile: gemfile, gemfile_lock: gemfile_lock).call.direct_dependencies }
+  let(:locked_specs) { Bundler::Explain::Parser.new(gemfile: gemfile, gemfile_lock: gemfile_lock).call.locked_specs }
 
   context 'simple consistantly dependencies' do
     let(:gem) { 'nio4r' }
-    subject { Bundler::Explain::DependencyAnalyzer.new(from_gemfile, dependencies, gem).call }
+    subject { Bundler::Explain::DependencyAnalyzer.new(direct_dependencies, locked_specs, gem).call }
 
     it 'find dependencies for gem' do
-      expect(subject).to include ( { "nio4r" =>[{ "actioncable"=> [{"rails" => nil }] }] } )
+      expect(subject.dependencies_names).to include ( { "nio4r" =>[{ "actioncable"=> [{"rails" => [] }] }] } )
     end
   end
 
   context 'more complex dependencies' do
     let(:gem) { 'globalid' }
-    subject { Bundler::Explain::DependencyAnalyzer.new(from_gemfile, dependencies, gem).call }
+    subject { Bundler::Explain::DependencyAnalyzer.new(direct_dependencies, locked_specs, gem).call }
 
     it 'find dependencies for gem' do
-      expect(subject).to include ( {"globalid" => [{"activejob" => [{"actionmailer" => [{"rails" => nil}]}, {"rails" => nil}]}]} )
+      expect(subject.dependencies_names).to include ( {"globalid" => [{"activejob" => [{"actionmailer" => [{"rails" => []}]}, {"rails" => []}]}]} )
     end
   end
 end

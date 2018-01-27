@@ -1,26 +1,36 @@
 module Bundler
   module Explain
     class DependencyAnalyzer
-      def initialize(from_gemfile, dependencies, gem_name)
-        @from_gemfile = from_gemfile
-        @dependencies = dependencies
+      def initialize(direct_dependencies, locked_specs, gem_name)
+        @direct_dependencies = direct_dependencies
+        @locked_specs = locked_specs
         @gem_name = gem_name
       end
 
       def call
-        { @gem_name => build_tree_dependencies(@gem_name) }
+        root_locked_spec.dependencies = find_dependencies(@gem_name)
+        root_locked_spec
       end
 
       protected
 
-      def build_tree_dependencies(current_gem)
-        @dependencies.select { |_, v| v.include? current_gem }.keys.map do |dep|
-          if @from_gemfile.include? dep
-            { dep => nil }
+      def find_dependencies(current_gem)
+        @locked_specs.select { |spec| dependencies_include?(spec.dependencies, current_gem) }.map do |spec|
+          if dependencies_include?(@direct_dependencies, spec.name)
+            spec.dependencies = []
           else
-            { dep => build_tree_dependencies(dep) }
+            spec.dependencies = find_dependencies(spec.name)
           end
+          spec
         end
+      end
+
+      def root_locked_spec
+        @root_locked_spec ||= Bundler::Explain::LockedSpec.new(name: @gem_name)
+      end
+
+      def dependencies_include?(dependencies, name)
+        dependencies.select { |dep| dep.name == name }.any?
       end
     end
   end

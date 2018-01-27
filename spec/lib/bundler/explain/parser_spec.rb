@@ -11,11 +11,12 @@ describe Bundler::Explain::Parser do
 
     describe '#locked_specs' do
       its('locked_specs.count') { is_expected.to eq 69 }
-      it 'return correct locked dependencies' do
-        locked_spec_dependencies = subject.locked_specs.select { |dep| dep.name == 'activesupport' }.first.dependencies
+      
+      it 'return correct dependencies for locked_specs' do
+        locked_spec_dependencies = subject.locked_specs.select { |spec| spec.name == 'activesupport' }.first.dependencies
         expect(locked_spec_dependencies.map(&:name)).to match_array ["concurrent-ruby", "i18n", "minitest", "tzinfo"]
 
-        locked_spec_dependencies = subject.locked_specs.select { |dep| dep.name == 'actioncable' }.first.dependencies
+        locked_spec_dependencies = subject.locked_specs.select { |spec| spec.name == 'actioncable' }.first.dependencies
         expect(locked_spec_dependencies.map(&:name)).to match_array ["actionpack", "nio4r", "websocket-driver"]
       end
     end
