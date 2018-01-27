@@ -1,27 +1,29 @@
 module Bundler
   module Explain
     class Parser
-      attr_reader :dependencies, :from_gemfile, :errors
+      attr_reader :locked_specs, :direct_dependencies, :errors
 
       def initialize(params = {})
         @gemfile = params[:gemfile]
         @gemfile_lock = params[:gemfile_lock]
-        @dependencies = {}
-        @from_gemfile = []
+        @locked_specs = []
+        @direct_dependencies = []
         @errors = []
       end
 
       def call
         begin
           definition = if @gemfile && @gemfile_lock
-                          Bundler::Definition.build(@gemfile, @gemfile_lock, nil)
+                         Bundler::Definition.build(@gemfile, @gemfile_lock, nil)
                        else
-                          Bundler.definition
+                         Bundler.definition
                        end
-          @dependencies = definition.gem_version_promoter.locked_specs.map do |dep|
-            [dep.name, dep.dependencies.map(&:name)]
-          end.to_h
-          @from_gemfile = definition.dependencies.map(&:name)
+          @locked_specs = definition.gem_version_promoter.locked_specs.map do |spec|
+            Bundler::Explain::LockedSpec.new(spec)
+          end
+          @direct_dependencies = definition.dependencies.map do |dep|
+            Bundler::Explain::Dependency.new(dep)
+          end
         rescue => e
           errors.push e
         end && self
