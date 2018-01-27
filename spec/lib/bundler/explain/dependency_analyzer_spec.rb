@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe Bundler::Explain::DependencyAnalyzer do
-  let(:gemfile) { File.expand_path("#{File.dirname(__FILE__)}/../../../examples/case1/Gemfile") }
-  let(:gemfile_lock) { File.expand_path("#{File.dirname(__FILE__)}/../../../examples/case1/Gemfile.lock") }
+  let(:gemfile) { "#{base_examples_folder}/case1/Gemfile" }
+  let(:gemfile_lock) { "#{base_examples_folder}/case1/Gemfile.lock" }
   let(:from_gemfile) { Bundler::Explain::Parser.new(gemfile: gemfile, gemfile_lock: gemfile_lock).call.from_gemfile }
   let(:dependencies) { Bundler::Explain::Parser.new(gemfile: gemfile, gemfile_lock: gemfile_lock).call.dependencies }
 

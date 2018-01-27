@@ -1,4 +1,5 @@
 require 'bundler/explain/parser'
+require 'bundler/explain/explain_spec'
 require 'bundler/explain/dependency_analyzer'
 require 'bundler/explain/renderer'
 require 'bundler/explain/explain'

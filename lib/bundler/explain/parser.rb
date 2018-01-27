@@ -18,9 +18,9 @@ module Bundler
                        else
                           Bundler.definition
                        end
-          @dependencies = definition.gem_version_promoter.locked_specs.inject(Hash.new([])) do |h, dep|
-            h[dep.name] = dep.dependencies.map(&:name); h
-          end
+          @dependencies = definition.gem_version_promoter.locked_specs.map do |dep|
+            [dep.name, dep.dependencies.map(&:name)]
+          end.to_h
           @from_gemfile = definition.dependencies.map(&:name)
         rescue => e
           errors.push e
