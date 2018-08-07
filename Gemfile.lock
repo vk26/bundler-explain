@@ -21,6 +21,9 @@ GEM
     rspec-expectations (3.7.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.7.0)
+    rspec-its (1.2.0)
+      rspec-core (>= 3.0.0)
+      rspec-expectations (>= 3.0.0)
     rspec-mocks (3.7.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.7.0)
@@ -30,9 +33,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bundler
   bundler-explain!
   pry
   rspec
+  rspec-its
 
 BUNDLED WITH
    1.16.0
