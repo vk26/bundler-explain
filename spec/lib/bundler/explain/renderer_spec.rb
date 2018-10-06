@@ -13,8 +13,41 @@ describe Bundler::Explain::Renderer do
   describe '#call' do
     subject { described_class.new(dependency_tree).call }
     it 'return formatted output dependencies tree' do
-
-      subject
+      expect(subject).to eq "rails-html-sanitizer
+├── actionview
+│   ├── actionpack
+│   │   ├── actioncable
+│   │   │   └── rails
+│   │   ├── actionmailer
+│   │   │   └── rails
+│   │   ├── railties
+│   │   │   ├── coffee-rails
+│   │   │   ├── rails
+│   │   │   ├── sass-rails
+│   │   │   └── web-console
+│   │   ├── sprockets-rails
+│   │   │   ├── rails
+│   │   │   └── sass-rails
+│   │   └── rails
+│   ├── actionmailer
+│   │   └── rails
+│   ├── rails
+│   └── web-console
+└── actionpack
+    ├── actioncable
+    │   └── rails
+    ├── actionmailer
+    │   └── rails
+    ├── railties
+    │   ├── coffee-rails
+    │   ├── rails
+    │   ├── sass-rails
+    │   └── web-console
+    ├── sprockets-rails
+    │   ├── rails
+    │   └── sass-rails
+    └── rails
+"
     end
   end
 end

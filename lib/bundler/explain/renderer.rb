@@ -8,8 +8,15 @@ module Bundler
       end
 
       def call
-        tree = TTY::Tree.new(@dependency_tree)
-        puts tree.render
+        formatter.tap do |formatted_tree|
+          puts formatted_tree
+        end
+      end
+
+      protected
+
+      def formatter
+        TTY::Tree.new(@dependency_tree).render
       end
     end
   end
