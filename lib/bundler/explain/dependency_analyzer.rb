@@ -8,18 +8,18 @@ module Bundler
       end
 
       def call
-        root_locked_spec.dependencies = find_dependencies(@gem_name)
+        root_locked_spec.dependencies_from_me = find_dependencies(@gem_name)
         root_locked_spec
       end
 
       protected
 
       def find_dependencies(current_gem)
-        @locked_specs.select { |spec| dependencies_include?(spec.dependencies, current_gem) }.map do |spec|
+        @locked_specs.select { |locked_spec| dependencies_include?(locked_spec.dependencies, current_gem) }.map do |spec|
           if dependencies_include?(@direct_dependencies, spec.name)
-            spec.dependencies = []
+            spec.dependencies_from_me = []
           else
-            spec.dependencies = find_dependencies(spec.name)
+            spec.dependencies_from_me += find_dependencies(spec.name)
           end
           spec
         end
@@ -30,7 +30,7 @@ module Bundler
       end
 
       def dependencies_include?(dependencies, name)
-        dependencies.select { |dep| dep.name == name }.any?
+        dependencies.any? { |dep| dep.name == name } rescue binding.pry
       end
     end
   end

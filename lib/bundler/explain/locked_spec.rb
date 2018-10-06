@@ -2,10 +2,11 @@ module Bundler
   module Explain
     class LockedSpec
       attr_reader :name, :version
-      attr_accessor :dependencies
+      attr_accessor :dependencies, :dependencies_from_me
 
       def initialize(params)
         @dependencies = []
+        @dependencies_from_me = []
         if params.is_a? Hash
           @name = params[:name]
           @version = params[:version]
@@ -28,10 +29,10 @@ module Bundler
       protected
 
       def dependencies_to_h(spec)
-        if spec.dependencies.empty?
+        if spec.dependencies_from_me.empty?
           { spec.name => [] }
         else
-          { spec.name => spec.dependencies.map { |dep| dependencies_to_h(dep) } }
+          { spec.name => spec.dependencies_from_me.map { |dep| dependencies_to_h(dep) } }
         end
       end
     end

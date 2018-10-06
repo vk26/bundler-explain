@@ -1,3 +1,5 @@
+require 'tty-tree'
+
 module Bundler
   module Explain
     class Renderer
@@ -6,7 +8,8 @@ module Bundler
       end
 
       def call
-        # TODO: format dependency_tree and output
+        tree = TTY::Tree.new(@dependency_tree)
+        puts tree.render
       end
     end
   end
