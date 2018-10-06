@@ -20,7 +20,6 @@ describe Bundler::Explain::DependencyAnalyzer do
     subject { Bundler::Explain::DependencyAnalyzer.new(direct_dependencies, locked_specs, gem).call }
 
     it 'find dependencies for gem' do
-      binding.pry
       expect(subject.dependencies_names).to include ( {"globalid" => [{"activejob" => [{"actionmailer" => [{"rails" => []}]}, {"rails" => []}]}]} )
     end
   end

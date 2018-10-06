@@ -6,7 +6,7 @@ module Bundler
 
       def initialize(params)
         @dependencies = []
-        @dependencies_from_me = []
+        @dependencies_from_me = Set.new
         if params.is_a? Hash
           @name = params[:name]
           @version = params[:version]

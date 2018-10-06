@@ -19,7 +19,7 @@ module Bundler
           if dependencies_include?(@direct_dependencies, spec.name)
             spec.dependencies_from_me = []
           else
-            spec.dependencies_from_me += find_dependencies(spec.name)
+            spec.dependencies_from_me.merge find_dependencies(spec.name)
           end
           spec
         end
@@ -30,7 +30,7 @@ module Bundler
       end
 
       def dependencies_include?(dependencies, name)
-        dependencies.any? { |dep| dep.name == name } rescue binding.pry
+        dependencies.any? { |dep| dep.name == name }
       end
     end
   end
